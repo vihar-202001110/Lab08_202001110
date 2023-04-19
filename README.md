@@ -103,6 +103,10 @@ The test-cases defined can thus go as follows:
 
 ```java
 final void testFitsInCage() {
+    // invalid length input
+    assertFalse(jen.fitsInCage(-1));
+    assertFalse(jen.fitsInCage(-3));
+
     // cage larger than boa
     assertTrue(jen.fitsInCage(10));
     assertTrue(ken.fitsInCage(6));
@@ -114,14 +118,57 @@ final void testFitsInCage() {
     // cage length equal to boa
     assertTrue(jen.fitsInCage(2));
     assertTrue(jen.fitsInCage(3));
-
-    // invalid length input
-    assertFalse(jen.fitsInCage(-1));
-    assertFalse(jen.fitsInCage(-3));
 }
 ```
 
 > Here, the test-cases will be broadly divided into two partitions, corresponding to cage length less than _Boa_, cage length greater than _Boa_ and the boundary condition of cage length equal to _Boa_.
-> The last two test cases also account for negative lengths which belong to invalid length input and hence must always return false.
+> The first two test cases also account for negative lengths which belong to invalid length input and hence must always return false.
 
 ## Running the Test Cases
+
+To run the test cases, we simply right-click on the file(_BoaTest.java_ here), click on _Coverage As_, and then _1 JUnit Test_.
+
+![image](https://user-images.githubusercontent.com/123557378/233040908-c781624e-c3ed-4503-adea-7be1aa2272ea.png)
+
+> Here, the last two test cases fail indicating an error in the code. The error occurs in the _isHealthy()_ function which is defined as follows:
+
+```java
+public boolean fitsInCage(int cageLength) {
+    return this.length < cageLength;
+}
+```
+
+To correct this error, the actual definition of the function should be like as shown below to account for the fact that the boa can fit in a cage equal to its length (even if not comfortably).
+
+```java
+public boolean fitsInCage(int cageLength) {
+    return this.length <= cageLength;
+}
+```
+
+With the modified code, we can see that all the test-case successfully pass now
+
+![image](https://user-images.githubusercontent.com/123557378/233041915-e4c42123-32f8-4f2e-a7a1-af1651daf218.png)
+
+## Adding new Method
+
+we add a new method _lengthInches()_ to return the length of the Boa in inches.
+
+```java
+public int lengthInches(){
+    return this.length * 12;
+}
+``
+```
+
+The new test cases defined for the same are as follows:
+
+```java
+final void testLengthInches() {
+    assertEquals(jen.lengthInches(), 24);
+    assertEquals(ken.lengthInches(), 36);
+}
+```
+The test case pass successfully as shown below
+
+![image](https://user-images.githubusercontent.com/123557378/233043302-50ee4e3f-c753-4dd8-9e0b-73fb6c51ae58.png)
