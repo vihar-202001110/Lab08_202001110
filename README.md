@@ -39,7 +39,8 @@ public class Boa {
 
 ## Creating a JUnit Test Class in Eclipse
 
-We can create a JUnit test case for any **.java** file by right-clicking on the file, selecting _new_ and then clicking on _JUnit Test Case_. We create a test case file **BoaTest.java** for **Boa.java** file  
+We can create a JUnit test case for any **.java** file by right-clicking on the file, selecting _new_ and then clicking on _JUnit Test Case_. We create a test case file **BoaTest.java** for **Boa.java** file.
+
 After configuring the test case file, we define the _setUp()_ function as follows
 
 ```java
@@ -61,5 +62,66 @@ class BoaTest {
 		jen = new Boa("Jennifer", 2, "grapes");
 		ken = new Boa("Kenneth", 3, "granola bars");
 	}
+	@AfterEach
+	void tearDown() throws Exception {
+	}
+	@Test
+	final void testIsHealthy() {
+		fail("Not yet implemented"); // TODO
+	}
+	@Test
+	final void testFitsInCage() {
+		fail("Not yet implemented"); // TODO
+	}
 }
 ```
+
+> Note that the methods _testIsHealthy()_ and _testFitsInCage()_ will contain code to test the _Boa_ class methods. These functions along with _tearDown()_ are yet to be implemented.
+
+## Testing _Boa_ class methods
+
+### _isHealthy()_ method
+
+It is important to note that the _isHealthy()_ function does not take any parameters. Due to this, the only test cases possible are to call the method on _Boa_ objects _"jen"_ and _"ken"_.  
+Thus, the test cases defined in the _testIsHealthy()_ test function is as follows:
+
+```java
+final void testIsHealthy() {
+    assertFalse(jen.isHealthy());
+    assertTrue(ken.isHealthy());
+}
+```
+
+> The cases are defined so because _jen_ does not have favoriteFood as _"granola bar"_ which is necessary for boa object to be healthy while _ken_ has favoriteFood as _"granola bar"_.
+
+### _FitsInCage()_ method
+
+The _FitsInCage()_ function takes an integer parameter as input and hence can have a range of test-cases possible.  
+Although _jen_ and _ken_ both will be executing the same function definition for _FitsInCage(<cage_length>)_ function call, it is better to call methods from both the instances to ensure independency of the function definition from the instance.
+
+The test-cases defined can thus go as follows:
+
+```java
+final void testFitsInCage() {
+    // cage larger than boa
+    assertTrue(jen.fitsInCage(10));
+    assertTrue(ken.fitsInCage(6));
+
+    // cage smaller than boa
+    assertFalse(jen.fitsInCage(0));
+    assertFalse(ken.fitsInCage(1));
+
+    // cage length equal to boa
+    assertTrue(jen.fitsInCage(2));
+    assertTrue(jen.fitsInCage(3));
+
+    // invalid length input
+    assertFalse(jen.fitsInCage(-1));
+    assertFalse(jen.fitsInCage(-3));
+}
+```
+
+> Here, the test-cases will be broadly divided into two partitions, corresponding to cage length less than _Boa_, cage length greater than _Boa_ and the boundary condition of cage length equal to _Boa_.
+> The last two test cases also account for negative lengths which belong to invalid length input and hence must always return false.
+
+## Running the Test Cases
